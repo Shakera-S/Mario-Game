@@ -36,6 +36,7 @@ class Player {
   }
   // Removes the trail the player leaves behind when they drop down
   update() {
+    this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
     this.draw();
     // Leeps the player from falling through the world
@@ -56,7 +57,7 @@ function animate() {
 
 animate();
 
-// Player Movement
+// Player Movement when you press down on a key
 window.addEventListener("keydown", ({ keyCode }) => {
   switch (keyCode) {
     case 65:
@@ -69,6 +70,31 @@ window.addEventListener("keydown", ({ keyCode }) => {
 
     case 68:
       console.log("right");
+      player.velocity.x += 20;
+      break;
+
+    // You would think + 20 would mean you're going up, but that's not the case -20 get you jumping
+    case 87:
+      console.log("up");
+      player.velocity.y -= 20;
+      break;
+  }
+});
+
+// For the player to stop moving when you aren't pressing the key
+window.addEventListener("keyup", ({ keyCode }) => {
+  switch (keyCode) {
+    case 65:
+      console.log("left");
+      break;
+
+    case 83:
+      console.log("down");
+      break;
+
+    case 68:
+      console.log("right");
+      player.velocity.x += 20;
       break;
 
     // You would think + 20 would mean you're going up, but that's not the case -20 get you jumping
