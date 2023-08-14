@@ -46,13 +46,49 @@ class Player {
   }
 }
 
-const player = new Player();
-player.update();
+class Platform {
+  constructor() {
+    this.position = {
+      x: 0,
+      y: 0,
+    };
 
+    this.width = 200;
+    this.height = 20;
+  }
+
+  draw() {
+    c.fillStyle = "purple";
+    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+  }
+}
+
+const player = new Player();
+const platform = new Platform();
+
+// Keys that I want to monitor, the default setting would be false
+const keys = {
+  right: {
+    pressed: false,
+  },
+  left: {
+    pressed: false,
+  },
+};
+
+// This is all about movement and removing the trail the player leaves behind
+// Getting the player to move forwards and backward smoothly without gliding
 function animate() {
   requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
   player.update();
+  platform.draw();
+
+  if (keys.right.pressed) {
+    player.velocity.x = 5;
+  } else if (keys.left.pressed) {
+    player.velocity.x = -5;
+  } else player.velocity.x = 0;
 }
 
 animate();
@@ -62,6 +98,7 @@ window.addEventListener("keydown", ({ keyCode }) => {
   switch (keyCode) {
     case 65:
       console.log("left");
+      keys.left.pressed = true;
       break;
 
     case 83:
@@ -70,7 +107,7 @@ window.addEventListener("keydown", ({ keyCode }) => {
 
     case 68:
       console.log("right");
-      player.velocity.x += 20;
+      keys.right.pressed = true;
       break;
 
     // You would think + 20 would mean you're going up, but that's not the case -20 get you jumping
@@ -86,6 +123,7 @@ window.addEventListener("keyup", ({ keyCode }) => {
   switch (keyCode) {
     case 65:
       console.log("left");
+      keys.left.pressed = false;
       break;
 
     case 83:
@@ -94,7 +132,7 @@ window.addEventListener("keyup", ({ keyCode }) => {
 
     case 68:
       console.log("right");
-      player.velocity.x += 20;
+      keys.right.pressed = false;
       break;
 
     // You would think + 20 would mean you're going up, but that's not the case -20 get you jumping
